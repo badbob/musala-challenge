@@ -20,4 +20,8 @@ public class PayloadItem {
 
     @Min(1)
     private int quantity;
+
+    public void increment() {
+        ++quantity;
+    }
 }

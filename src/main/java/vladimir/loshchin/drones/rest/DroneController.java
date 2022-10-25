@@ -37,11 +37,17 @@ public class DroneController {
         var medication = medicationRepo.findById(medicationCode)
             .orElseThrow(() -> new NoSuchMedicationException(medicationCode));
 
-        var pi = new PayloadItem();
-        pi.setMedication(medication);
-        pi.setQuantity(1);
+        var pi = drone.getPayload().stream()
+            .filter(i -> i.getMedication().equals(medication)).findFirst();
 
-        drone.getPayload().add(pi);
+        pi.ifPresentOrElse(PayloadItem::increment, () -> {
+                var newpi = new PayloadItem();
+                newpi.setMedication(medication);
+                newpi.setQuantity(1);
+
+                drone.getPayload().add(newpi);
+            });
+
 
         droneRepo.save(drone);
     }
