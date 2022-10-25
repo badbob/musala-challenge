@@ -1,7 +1,12 @@
 package vladimir.loshchin.drones.model;
 
+import java.util.Set;
+
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -33,4 +38,9 @@ public class Drone {
     @Max(1)
     @Min(0)
     private double batteryCharge;
+
+    @ElementCollection
+    @CollectionTable(name = "drone_payload", joinColumns = @JoinColumn(name = "drone_id"))
+    private Set<PayloadItem> payload;
+
 }

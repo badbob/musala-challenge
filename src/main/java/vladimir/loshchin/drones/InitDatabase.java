@@ -17,7 +17,7 @@ public class InitDatabase {
     @Bean
     CommandLineRunner initDB(DroneRepo droneRepo, MedicationRepo medicationRepo) {
         return args -> {
-            droneRepo.save(new Drone("SERIAL-1", DroneModel.LIGHT, DroneStatus.IDLE, 1.0));
+            droneRepo.save(new Drone("SERIAL-1", DroneModel.LIGHT, DroneStatus.IDLE, 1.0, null));
 
             medicationRepo.save(new Medication("ASPIRIN", "Aspirin", 30, null));
         };
