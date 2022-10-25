@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ch.qos.logback.core.status.Status;
 import vladimir.loshchin.drones.dao.DroneRepo;
 import vladimir.loshchin.drones.dao.MedicationRepo;
 import vladimir.loshchin.drones.exception.NoSuchDroneException;
 import vladimir.loshchin.drones.exception.NoSuchMedicationException;
 import vladimir.loshchin.drones.model.Drone;
+import vladimir.loshchin.drones.model.DroneStatus;
 import vladimir.loshchin.drones.model.PayloadItem;
 
 @RestController
@@ -48,6 +50,9 @@ public class DroneController {
                 drone.getPayload().add(newpi);
             });
 
+        if (drone.getStatus().equals(DroneStatus.IDLE)) {
+            drone.setStatus(DroneStatus.LOADING);
+        }
 
         droneRepo.save(drone);
     }
