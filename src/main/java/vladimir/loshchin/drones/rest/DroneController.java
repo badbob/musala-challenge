@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ch.qos.logback.core.status.Status;
 import vladimir.loshchin.drones.dao.DroneRepo;
 import vladimir.loshchin.drones.dao.MedicationRepo;
+import vladimir.loshchin.drones.exception.DroneOverloadedException;
 import vladimir.loshchin.drones.exception.NoSuchDroneException;
 import vladimir.loshchin.drones.exception.NoSuchMedicationException;
 import vladimir.loshchin.drones.model.Drone;
@@ -39,6 +40,10 @@ public class DroneController {
         var medication = medicationRepo.findById(medicationCode)
             .orElseThrow(() -> new NoSuchMedicationException(medicationCode));
 
+        if (drone.payloadWeight() + medication.getWeight() > drone.getModel().maxLoad()) {
+            throw new DroneOverloadedException(drone);
+        }
+
         var pi = drone.getPayload().stream()
             .filter(i -> i.getMedication().equals(medication)).findFirst();
 
@@ -49,6 +54,7 @@ public class DroneController {
 
                 drone.getPayload().add(newpi);
             });
+
 
         if (drone.getStatus().equals(DroneStatus.IDLE)) {
             drone.setStatus(DroneStatus.LOADING);

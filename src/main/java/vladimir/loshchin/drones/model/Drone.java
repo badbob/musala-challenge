@@ -43,4 +43,12 @@ public class Drone {
     @CollectionTable(name = "drone_payload", joinColumns = @JoinColumn(name = "drone_id"))
     private Set<PayloadItem> payload;
 
+    /**
+     * Calculates payload weight
+     */
+    public int payloadWeight() {
+        return payload.stream()
+            .map(pi -> pi.getMedication().getWeight() * pi.getQuantity())
+            .reduce(0, Integer::sum);
+    }
 }

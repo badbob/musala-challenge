@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.HttpMethod.PUT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.CONFLICT;
 
 @SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 class DronesApplicationTests {
@@ -42,11 +43,21 @@ class DronesApplicationTests {
     }
 
     @Test
-    void loadDrone() {
+    void overloadDrone() {
         var resp = restTemplate.exchange(
             put("/drone/SERIAL-1/load/ASPIRIN"), Void.class);
 
         assertEquals(OK, resp.getStatusCode());
+
+        resp = restTemplate.exchange(
+            put("/drone/SERIAL-1/load/ASPIRIN"), Void.class);
+
+        assertEquals(OK, resp.getStatusCode());
+
+        resp = restTemplate.exchange(
+            put("/drone/SERIAL-1/load/ASPIRIN"), Void.class);
+
+        assertEquals(CONFLICT, resp.getStatusCode());
     }
 
     private RequestEntity<?> put(String path) {
