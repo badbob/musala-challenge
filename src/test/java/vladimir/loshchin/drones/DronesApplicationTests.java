@@ -60,6 +60,14 @@ class DronesApplicationTests {
         assertEquals(CONFLICT, resp.getStatusCode());
     }
 
+    @Test
+    void invalidStatusLoad() {
+        var resp = restTemplate.exchange(
+            put("/drone/LOADED-DRONE/load/ASPIRIN"), Void.class);
+
+        assertEquals(CONFLICT, resp.getStatusCode());
+    }
+
     private RequestEntity<?> put(String path) {
         return new RequestEntity<>(PUT, uri(path));
     }
