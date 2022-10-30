@@ -2,6 +2,7 @@ package vladimir.loshchin.drones.dao;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.history.RevisionRepository;
@@ -14,4 +15,7 @@ public interface DroneRepo extends JpaRepository<Drone, String>,
 
     List<Drone> findAllByStatusAndBatteryChargeLessThan(
         DroneStatus status, BigDecimal charge);
+
+    List<Drone> findAllByStatusInAndBatteryChargeGreaterThanEqual(
+        Set<DroneStatus> statuses, BigDecimal threshold);
 }

@@ -28,6 +28,8 @@ import vladimir.loshchin.drones.model.PayloadItem;
 
 import static java.util.stream.Collectors.toList;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping("/drone")
 public class DroneController {
@@ -51,6 +53,12 @@ public class DroneController {
     @GetMapping(path = "/list")
     public List<Drone> list() {
         return droneRepo.findAll();
+    }
+
+    @GetMapping(path = "/list/available")
+    public List<Drone> listAvailable() {
+        return droneRepo.findAllByStatusInAndBatteryChargeGreaterThanEqual(
+            Set.of(DroneStatus.IDLE, DroneStatus.LOADING), new BigDecimal("0.25"));
     }
 
     @GetMapping(path = "/{serial}")

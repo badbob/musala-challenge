@@ -44,6 +44,24 @@ Response:
       }
     ]
 
+## List available drones
+
+Request:
+
+    $ curl -s localhost:8080/drone/list/available | jq .
+
+Response:
+
+    [
+      {
+        "serial": "SERIAL-1",
+        "model": "LIGHT",
+        "status": "IDLE",
+        "batteryCharge": 1,
+        "payload": []
+      }
+    ]
+
 ## List medications
 
 Request:
