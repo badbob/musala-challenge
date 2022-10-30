@@ -9,6 +9,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,5 +30,6 @@ public class Medication {
     @Min(1)
     private int weight /* gr */;
 
+    @JsonIgnore
     private Blob image;
 }
