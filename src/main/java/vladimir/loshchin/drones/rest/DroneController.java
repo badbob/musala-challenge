@@ -6,11 +6,12 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ch.qos.logback.core.status.Status;
 import vladimir.loshchin.drones.dao.DroneRepo;
 import vladimir.loshchin.drones.dao.MedicationRepo;
 import vladimir.loshchin.drones.exception.DroneOutOfBatteryException;
@@ -36,6 +37,11 @@ public class DroneController {
 
     @Autowired
     private MedicationRepo medicationRepo;
+
+    @PostMapping
+    public void create(@RequestBody Drone drone) {
+        droneRepo.save(drone);
+    }
 
     @GetMapping(path = "/list")
     public List<Drone> list() {
