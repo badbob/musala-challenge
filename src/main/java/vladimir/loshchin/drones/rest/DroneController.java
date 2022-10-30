@@ -3,6 +3,8 @@ package vladimir.loshchin.drones.rest;
 import java.util.List;
 import java.util.Set;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,7 +41,7 @@ public class DroneController {
     private MedicationRepo medicationRepo;
 
     @PostMapping
-    public void create(@RequestBody Drone drone) {
+    public void create(@Valid @RequestBody Drone drone) {
         droneRepo.save(drone);
     }
 

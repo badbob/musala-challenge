@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
 
 import vladimir.loshchin.drones.dao.DroneRepo;
@@ -22,6 +20,7 @@ import static org.springframework.http.HttpMethod.PUT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 @SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 class DronesApplicationTests {
@@ -86,7 +85,7 @@ class DronesApplicationTests {
     }
 
     @Test
-    void testCreate() {
+    void createDrone() {
         var drone = new Drone();
         drone.setSerial("NEW-DRONE");
         drone.setBatteryCharge(1.0);
@@ -101,6 +100,19 @@ class DronesApplicationTests {
         assertEquals(drone.getBatteryCharge(), persisted.getBatteryCharge());
         assertEquals(drone.getModel(), persisted.getModel());
         assertEquals(drone.getStatus(), persisted.getStatus());
+    }
+
+    @Test
+    void createDrone_serialNumOverflow() {
+        var drone = new Drone();
+        drone.setSerial("SUPER-LONG-0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000-SERIAL");
+        drone.setBatteryCharge(1.0);
+        drone.setModel(DroneModel.HEAVY);
+        drone.setStatus(DroneStatus.IDLE);
+
+        var resp = restTemplate.postForEntity("/drone", drone, Void.class);
+
+        assertEquals(UNPROCESSABLE_ENTITY, resp.getStatusCode());
     }
 
     private RequestEntity<?> put(String path) {

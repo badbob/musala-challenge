@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Drone {
 
-    @Id @Length(max = 100)
+    @Id @Length(min = 1, max = 100)
     private String serial;
 
     @NotNull
