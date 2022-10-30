@@ -1,5 +1,6 @@
 package vladimir.loshchin.drones.model;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 import javax.persistence.CollectionTable;
@@ -41,7 +42,7 @@ public class Drone {
      */
     @Max(1)
     @Min(0)
-    private double batteryCharge;
+    private BigDecimal batteryCharge;
 
     @NotAudited
     @ElementCollection

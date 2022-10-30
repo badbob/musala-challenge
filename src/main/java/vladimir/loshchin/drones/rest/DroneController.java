@@ -53,6 +53,12 @@ public class DroneController {
         return droneRepo.findAll();
     }
 
+    @GetMapping(path = "/{serial}")
+    public Drone get(@PathVariable String serial) {
+        return droneRepo.findById(serial)
+            .orElseThrow(() -> new NoSuchDroneException(serial));
+    }
+
     @PutMapping(path = "/{id}/load/{medicationCode}")
     public void load(@PathVariable String id, @PathVariable String medicationCode)
             throws NoSuchDroneException,
@@ -71,7 +77,7 @@ public class DroneController {
             throw new InvalidDroneStatusException(drone, statusesAllowedForLoading);
         }
 
-        if (drone.getBatteryCharge() < BATTERY_THRESHOLD) {
+        if (drone.getBatteryCharge().doubleValue() < BATTERY_THRESHOLD) {
             throw new DroneOutOfBatteryException(drone, BATTERY_THRESHOLD);
         }
 

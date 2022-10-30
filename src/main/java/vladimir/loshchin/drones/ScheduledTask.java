@@ -1,5 +1,7 @@
 package vladimir.loshchin.drones;
 
+import java.math.BigDecimal;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +26,13 @@ public class ScheduledTask {
      */
     @Scheduled(fixedRate = 5000)
     public void chargingTask() {
-        var idleDrones = droneRepo.findAllByStatusAndBatteryChargeLessThan(DroneStatus.IDLE, 1.0);
+        var idleDrones = droneRepo.findAllByStatusAndBatteryChargeLessThan(DroneStatus.IDLE, new BigDecimal(1));
 
         idleDrones.forEach(d -> {
-                if (d.getBatteryCharge() + CHARGE_STEP >= 1) {
-                    d.setBatteryCharge(1.0);
+                if (d.getBatteryCharge().doubleValue() + CHARGE_STEP >= 1) {
+                    d.setBatteryCharge(new BigDecimal(1));
                 } else {
-                    d.setBatteryCharge(d.getBatteryCharge() + CHARGE_STEP);
+                    d.setBatteryCharge(new BigDecimal(d.getBatteryCharge().doubleValue() + CHARGE_STEP));
                 }
 
                 droneRepo.save(d);

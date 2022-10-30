@@ -1,5 +1,6 @@
 package vladimir.loshchin.drones;
 
+import java.math.BigDecimal;
 import java.util.Base64;
 
 import javax.sql.rowset.serial.SerialBlob;
@@ -22,9 +23,9 @@ public class InitDatabase {
     @Bean
     CommandLineRunner initDB(DroneRepo droneRepo, MedicationRepo medicationRepo) {
         return args -> {
-            droneRepo.save(new Drone("SERIAL-1", DroneModel.LIGHT, DroneStatus.IDLE, 1.0, null));
-            droneRepo.save(new Drone("LOADED-DRONE", DroneModel.MIDDLE, DroneStatus.LOADED, 1.0, null));
-            droneRepo.save(new Drone("OUT-OF-BATTERY", DroneModel.CRUISER, DroneStatus.IDLE, 0.1, null));
+            droneRepo.save(new Drone("SERIAL-1", DroneModel.LIGHT, DroneStatus.IDLE, new BigDecimal(1), null));
+            droneRepo.save(new Drone("LOADED-DRONE", DroneModel.MIDDLE, DroneStatus.LOADED, new BigDecimal(1), null));
+            droneRepo.save(new Drone("OUT-OF-BATTERY", DroneModel.CRUISER, DroneStatus.IDLE, new BigDecimal("0.1"), null));
 
             medicationRepo.save(new Medication("ASPIRIN", "Aspirin", 20, new SerialBlob(Base64.getDecoder().decode(ASPIRIN_IMAGE_BASE64))));
         };
