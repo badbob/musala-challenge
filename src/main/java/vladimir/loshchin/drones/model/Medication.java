@@ -1,5 +1,7 @@
 package vladimir.loshchin.drones.model;
 
+import java.sql.Blob;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.Min;
@@ -26,5 +28,5 @@ public class Medication {
     @Min(1)
     private int weight /* gr */;
 
-    private byte[] image;
+    private Blob image;
 }
