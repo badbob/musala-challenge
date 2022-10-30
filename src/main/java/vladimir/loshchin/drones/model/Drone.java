@@ -17,10 +17,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Audited
 public class Drone {
 
     @Id @Length(min = 1, max = 100)
@@ -39,6 +43,7 @@ public class Drone {
     @Min(0)
     private double batteryCharge;
 
+    @NotAudited
     @ElementCollection
     @CollectionTable(name = "drone_payload", joinColumns = @JoinColumn(name = "drone_id"))
     private Set<PayloadItem> payload;

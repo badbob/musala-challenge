@@ -1,6 +1,7 @@
 package vladimir.loshchin.drones.rest;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -24,6 +25,8 @@ import vladimir.loshchin.drones.exception.NoSuchMedicationException;
 import vladimir.loshchin.drones.model.Drone;
 import vladimir.loshchin.drones.model.DroneStatus;
 import vladimir.loshchin.drones.model.PayloadItem;
+
+import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/drone")
@@ -89,5 +92,17 @@ public class DroneController {
         }
 
         droneRepo.save(drone);
+    }
+
+    @GetMapping(path = "/{serial}/history")
+    public List<Map<String, ?>> droneHistory(@PathVariable String serial) {
+        return droneRepo.findRevisions(serial).stream()
+            .map(r -> {
+                    return Map.of(
+                        "timestamp", r.getRequiredRevisionInstant(),
+                        "revision", r.getRequiredRevisionNumber(),
+                        "drone", r.getEntity());
+                })
+            .collect(toList());
     }
 }
