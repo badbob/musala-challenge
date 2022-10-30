@@ -19,6 +19,7 @@ public class InitDatabase {
         return args -> {
             droneRepo.save(new Drone("SERIAL-1", DroneModel.LIGHT, DroneStatus.IDLE, 1.0, null));
             droneRepo.save(new Drone("LOADED-DRONE", DroneModel.MIDDLE, DroneStatus.LOADED, 1.0, null));
+            droneRepo.save(new Drone("OUT-OF-BATTERY", DroneModel.CRUISER, DroneStatus.IDLE, 0.1, null));
 
             medicationRepo.save(new Medication("ASPIRIN", "Aspirin", 20, null));
         };

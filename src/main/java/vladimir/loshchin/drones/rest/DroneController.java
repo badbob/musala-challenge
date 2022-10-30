@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ch.qos.logback.core.status.Status;
 import vladimir.loshchin.drones.dao.DroneRepo;
 import vladimir.loshchin.drones.dao.MedicationRepo;
+import vladimir.loshchin.drones.exception.DroneOutOfBatteryException;
 import vladimir.loshchin.drones.exception.DroneOverloadedException;
 import vladimir.loshchin.drones.exception.InvalidDroneStatusException;
 import vladimir.loshchin.drones.exception.NoSuchDroneException;
@@ -27,6 +28,8 @@ public class DroneController {
 
     private static final Set<DroneStatus> statusesAllowedForLoading
         = Set.of(DroneStatus.IDLE, DroneStatus.LOADING);
+
+    private static final double BATTERY_THRESHOLD = 0.25;
 
     @Autowired
     private DroneRepo droneRepo;
@@ -55,6 +58,10 @@ public class DroneController {
 
         if (!statusesAllowedForLoading.contains(drone.getStatus())) {
             throw new InvalidDroneStatusException(drone, statusesAllowedForLoading);
+        }
+
+        if (drone.getBatteryCharge() < BATTERY_THRESHOLD) {
+            throw new DroneOutOfBatteryException(drone, BATTERY_THRESHOLD);
         }
 
         var pi = drone.getPayload().stream()

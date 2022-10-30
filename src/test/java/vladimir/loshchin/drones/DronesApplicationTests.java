@@ -68,6 +68,14 @@ class DronesApplicationTests {
         assertEquals(CONFLICT, resp.getStatusCode());
     }
 
+    @Test
+    void outOfBattery() {
+        var resp = restTemplate.exchange(
+            put("/drone/OUT-OF-BATTERY/load/ASPIRIN"), Void.class);
+
+        assertEquals(CONFLICT, resp.getStatusCode());
+    }
+
     private RequestEntity<?> put(String path) {
         return new RequestEntity<>(PUT, uri(path));
     }
