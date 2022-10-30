@@ -14,6 +14,7 @@ import vladimir.loshchin.drones.dao.DroneRepo;
 import vladimir.loshchin.drones.model.Drone;
 import vladimir.loshchin.drones.model.DroneModel;
 import vladimir.loshchin.drones.model.DroneStatus;
+import vladimir.loshchin.drones.model.Medication;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.HttpMethod.PUT;
@@ -92,7 +93,9 @@ class DronesApplicationTests {
         drone.setModel(DroneModel.HEAVY);
         drone.setStatus(DroneStatus.IDLE);
 
-        restTemplate.postForObject("/drone", drone, Void.class);
+        var resp = restTemplate.postForEntity("/drone", drone, Void.class);
+
+        assertEquals(OK, resp.getStatusCode());
 
         var persisted = droneRepo.findById(drone.getSerial()).get();
 
@@ -111,6 +114,30 @@ class DronesApplicationTests {
         drone.setStatus(DroneStatus.IDLE);
 
         var resp = restTemplate.postForEntity("/drone", drone, Void.class);
+
+        assertEquals(UNPROCESSABLE_ENTITY, resp.getStatusCode());
+    }
+
+    @Test
+    void createMedication() {
+        var medication = new Medication();
+        medication.setCode("PARA_CETAM0L");
+        medication.setWeight(10);
+        medication.setName("Para-ceta_m0l");
+
+        var resp = restTemplate.postForEntity("/medication", medication, Void.class);
+
+        assertEquals(OK, resp.getStatusCode());
+    }
+
+    @Test
+    void createMedication_invalidCode() {
+        var medication = new Medication();
+        medication.setCode("123");
+        medication.setWeight(10);
+        medication.setName("paracetamol");
+
+        var resp = restTemplate.postForEntity("/medication", medication, Void.class);
 
         assertEquals(UNPROCESSABLE_ENTITY, resp.getStatusCode());
     }
